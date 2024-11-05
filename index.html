@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Environmental Data by Location</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <style>
+   /* General Page Styling */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #0099ff;
+  background-image: url("https://www.transparenttextures.com/patterns/brushed-alum.png");}
+
+/* Sky and Grass Styling */
+.sky {
+  width: 100%;
+  padding-top: 20px; /* Extra padding to avoid overlap with trees */
+  position: relative;
+}
+
+.grass {
+    width: 100%;
+    background-color: #3edb00;
+    background-image: url("https://www.transparenttextures.com/patterns/black-paper.png");
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1; /* Allows grass to expand to fill the remaining space */
+    box-shadow: inset 0 -5px 10px #00000033; /* Subtle shadow for depth */
+}
+
+/* Containers for Top 3 and Other Trees */
+.section-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 50px; /* Space between sections */
+}
+
+.top3-container, .other-locations-container {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 75px;
+}
+
+.other-locations-container {
+  display: flex;
+  gap: 20px; /* Space between trees */
+  flex-wrap: wrap; /* Allows wrapping to next line if necessary */
+  justify-content: center; /* Center the items */
+}
+
+/* Individual Tree Styling */
+.tree {
+  width: 150px; /* Adjust width as needed */
+  height: 250px; /* Height of the trees */
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #4CAF50; /* Default tree color */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+}
+
+/* Gold, Silver, Bronze Trees for Top 3 */
+.gold {
+  background-color: #FFD700;
+  width: 200px;
+  height: 250px; /* Adjusted height to fit the button */
+  margin-bottom: 0px;
+}
+
+.silver {
+  background-color: #C0C0C0;
+  width: 170px;
+  height: 230px; /* Adjusted height to fit the button */
+  margin-bottom: 0px;
+}
+
+.bronze {
+  background-color: #CD7F32;
+  width: 150px;
+  height: 210px; /* Adjusted height to fit the button */
+  margin-bottom: 0px;
+}
+
+.tree-label {
+  font-weight: bold;
+  margin-top: 10px;
+  color: black;
+  text-align: center;
+}
+
+/* Pie Chart Placeholder */
+.pie-chart {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-top: 15px;
+}
+
+/* Log Styling */
+.log {
+  width: 30px; /* Width of the log */
+  height: 30px; /* Height of the log */
+  background-color: #8B4513; /* Brown log color */
+  border-bottom-left-radius: 10px; /* Rounded corners */
+  border-bottom-right-radius: 10px; /* Rounded corners */
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3); /* Shadow effect */
+  position: absolute; /* Absolute positioning */
+  bottom: -30px; /* Position it below the tree */
+  left: 50%; /* Move to the center horizontally */
+  transform: translateX(-50%); /* Offset by half of its own width to center it */
+}
+
+
+.more-info-button {
+  margin-top: 10px; /* Space above the button */
+  padding: 5px 10px; /* Padding for button */
+  background-color: #4682B4; /* Button blue color */
+  color: white; /* Text color */
+  border: none; /* No border */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  font-size: 12px; /* Font size */
+  text-align: center; /* Center text */
+  text-decoration: none; /* No underline */
+  
+  /* Center the button */
+  display: block; /* Makes the button behave like a block element */
+  width: fit-content; /* Adjust width to fit the content */
+  margin-left: auto; /* Push to the right */
+  margin-right: auto; /* Push to the left */
+}
+
+
+.more-info-button:hover {
+  background-color: #4169E1; /* Darker blue on hover */
+}
+
+/* Cloud Styling */
+.cloud {
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 10px 40px;
+  text-align: center;
+  font-weight: bold;
+  color: #666;
+  margin-bottom: 20px; /* Negative margin to bring closer to the trees */
+}
+
+.date-picker-container {
+  align-self: center;
+  display: flex; /* Flex layout for horizontal alignment */
+  align-items: center; /* Center items vertically */
+  justify-content: space-between; /* Space out items evenly */
+  margin: 20px; /* Margin around the container */
+  padding: 10px; /* Padding for spacing */
+  background-color: #fff; /* Background color */
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+  max-width: 600px; /* Set a maximum width for the container */
+  width: 100%; /* Allow it to stretch to the maximum width defined */
+}
+
+.date-picker-container label {
+  margin-right: 10px; /* Space after each label */
+  font-weight: bold; /* Bold labels */
+  color: #333; /* Label text color */
+}
+
+.date-picker-container input[type="date"] {
+  padding: 10px; /* Padding inside input fields */
+  border: 1px solid #ccc; /* Border color */
+  border-radius: 5px; /* Rounded corners */
+  margin-right: 10px; /* Space to the right of input fields */
+  width: 120px; /* Fixed width for date inputs */
+  transition: border-color 0.3s; /* Smooth border transition */
+}
+
+.date-picker-container input[type="date"]:focus {
+  border-color: #76C7C0; /* Change border color on focus */
+  outline: none; /* Remove default outline */
+}
+
+.date-picker-container button {
+  padding: 10px 20px; /* Button padding */
+  background-color: #4682B4; /* Button background color */
+  color: white; /* Button text color */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  font-size: 16px; /* Button font size */
+  transition: background-color 0.3s; /* Smooth background color transition */
+}
+
+.date-picker-container button:hover {
+  background-color: #4169E1; /* Darker blue on hover */
+}
+
+.info-container {
+    display: flex; /* Flexbox for layout */
+    justify-content: space-around; /* Space between boxes */
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+}
+
+/* Individual info box styles */
+.info-box {
+    background-color: #f9f9f9; /* Light background for visibility */
+    padding: 20px; /* Spacing around the text */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    flex: 1; /* Grow to fill space */
+    max-width: 300px; /* Limit the width */
+    text-align: center; /* Center text */
+    margin-bottom: 20px;
+}
+
+h2 {
+    color: #333; /* Heading color */
+}
+
+p {
+    color: #555; /* Paragraph text color */
+    line-height: 1.5; /* Line height for better readability */
+}
+  </style>
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+</head>
+<body>
+  <!-- Sky -->
+<div class="sky"></div>
+  <div class="info-container">
+    <div class="info-box">
+        <h2>Wat is Duurzaam Zuyd?</h2>
+        <p>Duurzaam Zuyd is a commitment to sustainable practices and initiatives within the Zuyd University community. It encompasses various aspects of environmental stewardship, social responsibility, and economic sustainability, aimed at fostering a greener future for students, staff, and the community.</p>
+    </div>
+
+    <div class="info-box">
+        <h2>Onze Duurzaamheidsdoelen</h2>
+        <p>We aim to reduce waste, conserve energy, and promote recycling within all campuses. Our initiatives include awareness campaigns, workshops, and collaborative projects that engage students and staff in sustainability efforts.</p>
+    </div>
+
+    <div class="info-box">
+        <h2>Betrokkenheid van de Gemeenschap</h2>
+        <p>Duurzaam Zuyd werkt samen met lokale organisaties en bedrijven om duurzame oplossingen te implementeren. We geloven dat samenwerking met de gemeenschap de sleutel is tot het creëren van een blijvende impact.</p>
+    </div>
+  </div>
+    <!-- Date Picker -->
+    <div class="date-picker-container">
+      <label for="dateRange">Select Date Range:</label>
+      <input type="text" id="dateRange" placeholder="Select date range" readonly>
+      <button id="filterButton">Filter</button>
+    </div>
+</div>
+
+
+  <!-- Grass with Trees and Clouds -->
+<div class="grass">
+  <div class="cloud">Top 3 Locations</div>
+  <div class="top3-container">
+    <div class="tree gold">
+      <div class="tree-label">Ligne</div>
+      <canvas id="chartLigne" width="100" height="100"></canvas>
+      <div class="log"></div>
+    </div>
+    <div class="tree silver">
+      <div class="tree-label">Brusselse Weg</div>
+      <canvas id="chartBrusselseWeg" width="100" height="100"></canvas>
+      <div class="log"></div>
+    </div>
+    <div class="tree bronze">
+      <div class="tree-label">Nieuw Eyckholt</div>
+      <canvas id="chartNieuwEyckholt" width="100" height="100"></canvas>
+      <div class="log"></div>
+    </div>
+  </div>
+
+  <!-- Other Locations Section -->
+  <div class="section-container">
+    <div class="cloud">Other Locations</div>
+    <div class="other-locations-container">
+      <div class="tree">
+        <div class="tree-label">Conservatorium Hoofdgebouw</div>
+        <canvas id="chartConservatoriumHoofdgebouw" width="100" height="100"></canvas>
+        <a href="#" class="more-info-button">More Info</a>
+        <div class="log"></div>
+      </div>
+      <div class="tree">
+        <div class="tree-label">Conservatorium Dependence</div>
+        <canvas id="chartConservatoriumDependance" width="100" height="100"></canvas>
+        <a href="#" class="more-info-button">More Info</a>
+        <div class="log"></div>
+      </div>
+      <div class="tree">
+        <div class="tree-label">Beeldende Kunsten</div>
+        <canvas id="chartAcademieBeeldendeKunsten" width="100" height="100"></canvas>
+        <a href="#" class="more-info-button">More Info</a>
+        <div class="log"></div>
+      </div>
+      <div class="tree">
+        <div class="tree-label">Toneelacademie</div>
+        <canvas id="chartToneelacademie" width="100" height="100"></canvas>
+        <a href="#" class="more-info-button">More Info</a>
+        <div class="log"></div>
+      </div>
+      <div class="tree">
+        <div class="tree-label">Keuken Hoge Hotelschool</div>
+        <canvas id="chartKeukenHogeHotelschool" width="100" height="100"></canvas>
+        <a href="#" class="more-info-button">More Info</a>
+        <div class="log"></div>
+      </div>
+      <div class="tree">
+        <div class="tree-label">Hotel Hoge Hotelschool</div>
+        <canvas id="chartHotelHogeHotelschool" width="100" height="100"></canvas>
+        <a href="#" class="more-info-button">More Info</a>
+        <div class="log"></div>
+      </div>
+      <div class="tree">
+        <div class="tree-label">Amphytrion Hoge Hotelschool</div>
+        <canvas id="chartAmphytrionHogeHotelschool" width="100" height="100"></canvas>
+        <a href="#" class="more-info-button">More Info</a>
+        <div class="log"></div>
+      </div>
+      <div class="tree">
+        <div class="tree-label">Maas/Kanjel Hoge Hotelschool Campus</div>
+        <canvas id="chartMaasKanjelHogeHotelschoolCampus" width="100" height="100"></canvas>
+        <a href="#" class="more-info-button">More Info</a>
+        <div class="log"></div>
+      </div>
+      <div class="tree">
+        <div class="tree-label">Geul Hoge Hotelschool Campus</div>
+        <canvas id="chartGeulHogeHotelschoolCampus" width="100" height="100"></canvas>
+        <a href="#" class="more-info-button">More Info</a>
+        <div class="log"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  <script src="script.js"></script>
+</body>
+</html>
