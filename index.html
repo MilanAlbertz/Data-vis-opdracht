@@ -147,6 +147,32 @@ body {
   background-color: #4169E1; /* Darker blue on hover */
 }
 
+.zuyd-breed-button {
+  margin-top: 10px; /* Space above the button */
+  margin-bottom: 10px; /* Space above the button */
+  padding: 5px 10px; /* Padding for button */
+  background-color: #4682B4; /* Button blue color */
+  color: white; /* Text color */
+  border: none; /* No border */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  font-size: 12px; /* Font size */
+  text-align: center; /* Center text */
+  text-decoration: none; /* No underline */
+  
+  /* Center the button */
+  display: block; /* Makes the button behave like a block element */
+  width: fit-content; /* Adjust width to fit the content */
+  margin-left: auto; /* Push to the right */
+  margin-right: auto; /* Push to the left */
+}
+
+
+.zuyd-breed-button:hover {
+  background-color: #4169E1; /* Darker blue on hover */
+}
+
+
 /* Cloud Styling */
 .cloud {
   background: #fff;
@@ -241,7 +267,8 @@ p {
 </head>
 <body>
   <!-- Sky -->
-<div class="sky"></div>
+  <div class="sky"></div>
+  <a href="zuydperyear.html" class="zuyd-breed-button">Zuyd per jaar</a>
   <div class="info-container">
     <div class="info-box">
         <h2>Wat is Duurzaam Zuyd?</h2>
@@ -349,6 +376,6 @@ p {
     </div>
   </div>
 </div>
-  <script src="script.js"></script>
+  <script src="indexScript.js"></script>
 </body>
 </html>
